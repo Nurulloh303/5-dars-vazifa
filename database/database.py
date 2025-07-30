@@ -11,12 +11,14 @@ class Database:
             cursor.execute(sql, args)
 
             res = None
-            if commit:
-                db.commit()
-            elif fetchone:
+
+            if fetchone:
                 res = cursor.fetchone()
             elif fetchall:
                 res = cursor.fetchall()
+
+            if commit:
+                db.commit()
         return res
 
     def create_table_users(self):
@@ -51,15 +53,35 @@ class Database:
     def create_table_travels(self):
         sql = """CREATE TABLE IF NOT EXISTS travels(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
+            name_uz TEXT,
+            name_en TEXT,
+            name_ru TEXT,
             price INTEGER,
             days INTEGER
         )"""
         self.execute(sql, commit=True)
 
-    def insert_travel(self, name, price, days):
-        sql = """INSERT INTO travels(name, price, days) VALUES (?, ?, ?)"""
-        self.execute(sql, name, price, days, commit=True)
+    def drop_table_travels(self):
+        sql = '''DROP TABLE IF EXISTS travels'''
+        self.execute(sql, commit=True)
+
+    def insert_travel(self, name_uz, name_en, name_ru, price, days):
+        sql = """INSERT INTO travels(name_uz, name_en, name_ru, price, days) VALUES (?, ?, ?, ?, ?)
+        RETURNING id"""
+        return self.execute(sql, name_uz, name_en, name_ru, price, days, fetchone=True)[0]
+
+    def select_travels(self, lang):
+        sql = f"""SELECT name_{lang}, id, price, days FROM travels"""
+        return self.execute(sql, fetchall=True)
+
+    def select_travels_with_image(self, travel_id, lang):
+        sql = f"""
+        SELECT travels.id, travels.name_{lang}, images.id, images.image 
+        FROM travels 
+        INNER JOIN images ON travels.id = images.travel_id 
+        WHERE travels.id = ?
+        """
+        return self.execute(sql, travel_id, fetchall=True)
 
     def creta_table_images(self):
         sql = """CREATE TABLE IF NOT EXISTS images(
@@ -73,3 +95,34 @@ class Database:
     def insert_image(self, image: str, travel_id: int):
         sql = """INSERT INTO images(image, travel_id) VALUES (?, ?)"""
         self.execute(sql, image, travel_id, commit=True)
+
+
+# ekskursiya-----------------
+
+    def create_table_excursion_schedule(self):
+        sql = """CREATE TABLE excursion_schedule (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        travel_id INTEGER,
+        excursion_date TEXT,
+        comment TEXT,
+        FOREIGN KEY(travel_id) REFERENCES travels(id)
+    );
+    """
+        self.execute(sql, commit=True)
+
+    def drop_table_excursion_schedule(self):
+        sql = """DROP TABLE IF EXISTS excursion_schedule"""
+        self.execute(sql, commit=True)
+
+    def insert_excursion(self, travel_id, date, comment):
+        sql = """INSERT INTO excursion_schedule (travel_id, excursion_date, comment) VALUES (?, ?, ?)"""
+        self.execute(sql, (travel_id, date, comment), commit=True)
+
+    def select_all_excursions(self):
+        sql = """SELECT * FROM excursion_schedule ORDER BY excursion_date"""
+        return self.execute(sql, fetchall=True)
+
+    def select_travel_name_by_id(self, travel_id: int, lang: str):
+        sql = f"""SELECT name_{lang} FROM travels WHERE id = ?"""
+        result = self.execute(sql, travel_id, fetchone=True)
+        return result[0] if result else "Noma'lum"

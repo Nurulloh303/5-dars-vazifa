@@ -13,7 +13,8 @@ TEXTS = {
         7: "Tilni tanlang",
         100: "📱Kontaktni yuborish",
         101: ["🗺 Sayohatlarni ko‘rish", "🏛 Mashhur joylar", "📅 Ekskursiya jadvali", "💬 Yo‘l ko‘rsatuvchi bilan aloqa", "💰 Narxlar", "📍 Yaqin joylar", "🧳 Sayohat rejamni tuz", "ℹ️ Biz haqimizda", "⚙️Sozlamalar"],
-        102: ["Tilni o'zgartirish", "Qayta ro'yxatdan o‘tish"]
+        102: ["Tilni o'zgartirish", "Qayta ro'yxatdan o‘tish"],
+        103: "Hozircha hech qanday ekskursiya mavjud emas."
     },
     "ru": {
         1: "Пожалуйста, введите Ваше полное имя!!!",
@@ -25,7 +26,9 @@ TEXTS = {
         7: "Выберите язык",
         100: "📱Отправить контакт",
         101: ["🗺 Посмотреть поездки", "🏛 Популярные направления", "📅 Расписание туров", "💬 Контакты", "💰 Цены", "📍 Рядом", "🧳 Спланируйте поездку", "ℹ️ О нас", "⚙️Настройки"],
-        102: ["Сменить язык", "Повторная регистрация"]
+        102: ["Сменить язык", "Повторная регистрация"],
+        103: "На данный момент экскурсий нет."
+
     },
     "en": {
         1: "Please enter your full name!!!",
@@ -37,7 +40,9 @@ TEXTS = {
         7: "Select a language",
         100: "📱Send contact",
         101: ["🗺 View Trips", "🏛 Popular Destinations", "📅 Tour Schedule", "💬 Contact Guide", "💰 Prices", "📍 Nearby", "🧳 Plan Your Trip", "ℹ️ About Us", "⚙️Settings"],
-        102: ["Change language", "Re-register"]
+        102: ["Change language", "Re-register"],
+        103: "No excursions available at the moment."
+
     }
 }
 
